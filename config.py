@@ -1,0 +1,42 @@
+import os
+
+# --- 1. BROKER CREDENTIALS (ANGEL ONE) ---
+API_KEY = "ATM2q52x"
+CLIENT_ID = "V90362"
+MPIN = "2727" 
+TOTP_KEY = "4NLG2ZCHP5NS5N2XYRUUKBQ4VA"
+
+# --- 2. TELEGRAM ALERTS ---
+TELEGRAM_TOKEN = "8516180035:AAFghjx4H1jc6ADFtkegWELX42ZQG99HBuY"
+TELEGRAM_CHAT_ID = "6911195221"
+
+# --- 3. SYSTEM SETTINGS ---
+DB_NAME = "trademaster_pro.db"
+TIME_ZONE = "Asia/Kolkata"
+
+# --- 4. TRADING LOGIC SETTINGS ---
+CAPITAL = 100000  # Aapka total trading capital (₹)
+SCAN_INTERVAL = "15m"   # 5m, 15m, 1h
+MIN_SCORE_TO_BUY = 50   # Scanner score requirement
+MIN_SCORE_TO_GOD_MODE = 80
+
+# Risk Management
+MAX_TRADES_PER_DAY = 5
+RISK_PER_TRADE = 2000   # Maximum loss per trade
+MAX_LOSS_DAY = 5000     # System stop loss
+TARGET_DAY = 10000      # Target profit for the day
+
+# AI Settings
+AI_CONFIDENCE_THRESHOLD = 60
+ENABLE_ML_TRAP_DETECTION = True
+
+# ✅ UPDATED: SECTORS TO TRACK (Sensex Added)
+SECTORS_TO_TRACK = ["NIFTY IT", "NIFTY AUTO", "NIFTY METAL", "NIFTY PHARMA", "BANKNIFTY", "NIFTY 50", "SENSEX"]
+
+# ✅ NEW: COMMODITY TIMING SETTINGS
+MCX_MARKET_CLOSE_HOUR = 23
+MCX_MARKET_CLOSE_MINUTE = 55
+
+# --- 5. PATHS ---
+MODELS_DIR = "models/"
+LOGS_DIR = "logs/"
