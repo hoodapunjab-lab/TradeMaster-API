@@ -28,10 +28,11 @@ market_status_cache = {
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=15)
 
+# ✅ 1. CORS FIX: allow_credentials ko False kar diya gaya hai taki HTML connect ho sake
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -121,8 +122,13 @@ def update_market_status_bg():
 
 # --- ROUTES ---
 
+# ✅ 2. 404 ERROR FIX: Frontend yahan aakar check karega ki server zinda hai ya nahi
+@app.get("/")
+def check_server_status():
+    return {"status": "online", "message": "TradeMaster Pro API is Running! 🚀"}
+
 @app.get("/api")
-def read_root():
+def read_root_api():
     return {"message": "TradeMaster Pro API is Running! 🚀"}
 
 @app.get("/active_trades")
