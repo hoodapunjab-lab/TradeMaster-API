@@ -122,10 +122,17 @@ def update_market_status_bg():
 
 # --- ROUTES ---
 
-# ✅ 2. 404 ERROR FIX: Frontend yahan aakar check karega ki server zinda hai ya nahi
+# ✅ 2. DASHBOARD DIRECT FIX (Ab main link par seedha UI khulega)
 @app.get("/")
-def check_server_status():
-    return {"status": "online", "message": "TradeMaster Pro API is Running! 🚀"}
+def serve_dashboard():
+    # Agar file bahar padi hai (Jaisa ki aapke screenshot me hai)
+    if os.path.exists("index.html"):
+        return FileResponse("index.html")
+    # Agar file static folder ke andar hai
+    elif os.path.exists("static/index.html"):
+        return FileResponse("static/index.html")
+    else:
+        return {"status": "online", "message": "API Running, but index.html is missing on GitHub!"}
 
 @app.get("/api")
 def read_root_api():
