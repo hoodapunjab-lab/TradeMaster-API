@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🚀 TradeMaster Pro V2.0 - AI GOD MODE (NSE + MCX)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script> 
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+
+        body { 
+            background: #08080c; 
+            background-image: radial-gradient(circle at top center, #1a1a2e 0%, #050505 100%);
+            color: #e6f3ff; 
+            font-family: 'Rajdhani', sans-serif; 
+            min-height: 100vh; 
+            overflow: hidden; /* Lock scroll until login */
+        }
+        
+        h1, h2, h3, .orbitron { font-family: 'Orbitron', monospace; }
+
+        /* ✅ LOGIN & EXPIRED OVERLAYS (Cyberpunk Style) */
+        #loginOverlay, #expiredOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 5, 0.98);
+            background-image: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            z-index: 99999; display: flex; justify-content: center; align-items: center;
+            flex-direction: column; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: 0.5s ease;
+        }
+
+        .auth-card {
+            background: rgba(15, 15, 25, 0.6); border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px; padding: 40px; text-align: center;
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);
+        }
+
+        .auth-card h1 { font-size: 2.5em; margin-bottom: 10px; background: -webkit-linear-gradient(45deg, #00d4ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .auth-card p { color: #88aadd; margin-bottom: 30px; font-size: 18px; letter-spacing: 1px; }
+
+        .google-btn {
+            background: #fff; color: #050505; border: none; padding: 12px 25px;
+            border-radius: 30px; font-weight: 800; font-family: 'Orbitron';
+            font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            transition: 0.3s; box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+        .google-btn:hover { transform: scale(1.05); box-shadow: 0 5px 25px rgba(255,255,255,0.4); }
+
+        /* Expired Card Red Theme */
+        #expiredOverlay .auth-card { border-color: rgba(255, 51, 102, 0.5); box-shadow: 0 0 50px rgba(255, 51, 102, 0.2); }
+        #expiredOverlay h1 { background: -webkit-linear-gradient(45deg, #ff3366, #ff0040); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .btn-upgrade {
+            background: linear-gradient(90deg, #ff0040, #ff3366); color: white; border: none;
+            padding: 12px 25px; border-radius: 30px; font-weight: 800; font-family: 'Orbitron';
+            font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3); transition: 0.3s;
+        }
+        .btn-upgrade:hover { transform: scale(1.05); box-shadow: 0 5px 25px rgba(255, 51, 102, 0.6); }
+
+        /* Main Content - hidden until login */
+        #mainDashboard { display: none; opacity: 0; transition: 0.5s ease; }
+
+        /* Motivational Quote Banner */
+        .quote-banner { background: linear-gradient(90deg, #0055ff, #00d4ff, #00ff88); background-size: 200% 200%; animation: gradientPan 6s ease infinite; padding: 10px; text-align: center; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4); color: #050505; font-family: 'Orbitron'; position: relative; z-index: 100;}
+        @keyframes gradientPan { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Header */
+        .sniper-header { background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 212, 255, 0.3); box-shadow: 0 5px 30px rgba(0, 212, 255, 0.1); padding: 25px; text-align: center; position: sticky; top: 0; z-index: 50; }
+        .system-status { position: absolute; right: 30px; top: 30px; font-size: 11px; display: flex; align-items: center; gap: 15px; font-family: 'Orbitron'; font-weight: 700; letter-spacing: 1px; }
+        .status-dot { width: 12px; height: 12px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 15px #00ff88; animation: pulseGlow 2s infinite; }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px #00ff88; } 50% { box-shadow: 0 0 20px #00ff88; } 100% { box-shadow: 0 0 5px #00ff88; } }
+        
+        /* ✅ USER INFO PROFILE STYLES */
+        .user-profile { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .user-pfp { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #00d4ff; box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
+        .user-name { color: #fff; font-size: 12px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        .btn-logout { background: none; border: 1px solid #ff3366; color: #ff3366; padding: 4px 10px; border-radius: 15px; cursor: pointer; font-family: 'Orbitron'; font-size: 10px; font-weight: 700; transition: 0.3s; }
+        .btn-logout:hover { background: #ff3366; color: #fff; box-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
+
+        h1.main-title { font-size: 2.2em; background: -webkit-linear-gradient(45deg, #00d4ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(0, 212, 255, 0.3); letter-spacing: 1px;}
+        .subtitle { font-size: 13px; color: #88aadd; margin-top: 8px; font-weight: 600; letter-spacing: 3px; }
+
+        /* ✅ Glassmorphism Cards */
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 30px; max-width: 1500px; margin: 0 auto; }
+        .matrix-card { 
+            background: rgba(15, 15, 25, 0.5); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 16px; 
+            padding: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            transition: all 0.4s ease; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .matrix-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.4); }
+        
+        /* ✅ Price Flash Animations */
+        .price-text { font-size: 2.3em; font-weight: 700; margin: 10px 0; color: #fff; font-family: 'Orbitron'; text-shadow: 0 0 10px rgba(255,255,255,0.1); transition: color 0.3s; }
+        @keyframes flashUp { 0% { color: #00ff88; text-shadow: 0 0 25px #00ff88; transform: scale(1.05); } 100% { color: inherit; text-shadow: none; transform: scale(1); } }
+        @keyframes flashDown { 0% { color: #ff3366; text-shadow: 0 0 25px #ff3366; transform: scale(1.05); } 100% { color: inherit; text-shadow: none; transform: scale(1); } }
+        .flash-up { animation: flashUp 1s ease-out; color: #00ff88 !important; }
+        .flash-down { animation: flashDown 1s ease-out; color: #ff3366 !important; }
+
+        .signal-text { font-size: 1.2em; font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; text-shadow: 0 0 15px currentColor;}
+        
+        /* ✅ Square Dotted Progress Bar */
+        .meter-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 2px; margin: 15px 0; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); }
+        .meter-fill { height: 100%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .metrics-row { display: flex; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.03); }
+        .metric-item { text-align: center; width: 48%; }
+        .metric-label { font-size: 10px; color: #88aadd; text-transform: uppercase; letter-spacing: 1px; }
+        .metric-val { font-size: 15px; font-weight: 700; color: #fff; margin-top: 3px; text-shadow: 0 0 5px rgba(255,255,255,0.2);}
+
+        /* Buttons */
+        .btn-action { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 12px; transition: all 0.3s; width: 100%; letter-spacing: 1px; text-transform: uppercase; font-family: 'Orbitron'; backdrop-filter: blur(5px);}
+        .btn-action:hover { background: rgba(255,255,255,0.15); transform: scale(1.03); }
+        .btn-buy { background: rgba(0,255,136,0.1); color: #00ff88; border-color: rgba(0,255,136,0.4); }
+        .btn-buy:hover { background: rgba(0,255,136,0.25); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+        .btn-sell { background: rgba(255,51,102,0.1); color: #ff3366; border-color: rgba(255,51,102,0.4); }
+        .btn-sell:hover { background: rgba(255,51,102,0.25); box-shadow: 0 0 20px rgba(255,51,102,0.4); }
+
+        /* Music Toggle Button */
+        .music-toggle { background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; color: #00d4ff; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: 'Orbitron'; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 5px; transition: 0.3s;}
+        .music-toggle:hover { background: rgba(0, 212, 255, 0.3); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+
+        /* Scan Controls */
+        .scan-controls { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin: 10px auto 30px; background: rgba(15,15,25,0.6); backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 50px; width: max-content; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid rgba(0, 212, 255, 0.2); }
+        #searchInput, #timeframeSelector { padding: 12px 20px; background: rgba(0,0,0,0.5); color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 25px; font-family: 'Orbitron'; outline: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
+        #searchInput:focus, #timeframeSelector:focus { border-color: #00d4ff; box-shadow: 0 0 15px rgba(0, 212, 255, 0.3); }
+        .scan-btn { background: linear-gradient(90deg, #00d4ff, #0055ff); border: none; font-weight: 700; cursor: pointer; padding: 12px 25px; border-radius: 25px; color: white; font-family: 'Orbitron'; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3); }
+        .scan-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6); }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; color: #88aadd; font-family: 'Orbitron'; }
+        .checkbox-label input { width: 16px; height: 16px; accent-color: #00d4ff; cursor: pointer; }
+
+        /* Tables (Glassmorphism applied) */
+        .table-container { padding: 0 30px; max-width: 1500px; margin: 0 auto 40px auto; overflow-x: auto; }
+        .section-title { color: #00d4ff; margin-bottom: 15px; font-size: 16px; font-family: 'Orbitron'; letter-spacing: 2px; border-left: 4px solid #00d4ff; padding-left: 10px; text-shadow: 0 0 10px rgba(0,212,255,0.3);}
+        .sniper-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
+        .sniper-table th { text-align: left; padding: 12px 15px; color: #88aadd; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .sniper-row { background: rgba(20, 20, 30, 0.5); backdrop-filter: blur(10px); transition: 0.3s; border: 1px solid transparent;}
+        .sniper-row:hover { background: rgba(30, 30, 45, 0.8); transform: scale(1.01); box-shadow: 0 5px 20px rgba(0,212,255,0.1); border-color: rgba(0, 212, 255, 0.2); }
+        .sniper-row td { padding: 15px; border-top: 1px solid rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .sniper-row td:first-child { border-left: 1px solid rgba(255,255,255,0.02); border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+        .sniper-row td:last-child { border-right: 1px solid rgba(255,255,255,0.02); border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+        
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+        .bg-green { background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.4); box-shadow: 0 0 10px rgba(0,255,136,0.2);}
+        .bg-red { background: rgba(255,51,102,0.15); color: #ff3366; border: 1px solid rgba(255,51,102,0.4); box-shadow: 0 0 10px rgba(255,51,102,0.2);}
+        .bg-gold { background: rgba(242,204,96,0.15); color: #f2cc60; border: 1px solid rgba(242,204,96,0.4); box-shadow: 0 0 10px rgba(242,204,96,0.2);}
+
+        /* Chart Modal */
+        #chartModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
+        .modal-content { width: 90%; height: 85%; margin: 3% auto; border: 1px solid #00d4ff; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
+        .close-chart { position: absolute; right: 3%; top: 2%; color: #ff3366; font-size: 35px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-weight: bold;}
+        .close-chart:hover { color: #ff0040; transform: scale(1.2); text-shadow: 0 0 15px #ff0040; }
+
+        /* Voice Bar */
+        .voice-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(10,10,20,0.8); padding: 10px 30px; border-radius: 50px; border: 1px solid rgba(0,212,255,0.4); display: flex; align-items: center; gap: 20px; backdrop-filter: blur(15px); z-index: 100; box-shadow: 0 10px 40px rgba(0,212,255,0.2); }
+        .mic-btn { width: 45px; height: 45px; border-radius: 50%; border: none; background: linear-gradient(135deg, #ff0040, #ff3366); color: white; font-size: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,0,64,0.5); transition: 0.3s; }
+        .mic-btn:hover { transform: scale(1.1); box-shadow: 0 5px 25px rgba(255,0,64,0.8); }
+        .mic-active { animation: pulseMic 1.5s infinite; }
+        @keyframes pulseMic { 0% { box-shadow: 0 0 0 0 rgba(255,0,64,0.7); } 70% { box-shadow: 0 0 0 15px rgba(255,0,64,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,64,0); } }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ 1. LOGIN OVERLAY (Shows by default) -->
+    <div id="loginOverlay">
+        <div class="auth-card">
+            <h1>🎯 TradeMaster Pro V2.0</h1>
+            <p>Institutional AI & GARCH Engine Enabled</p>
+            <p style="font-size: 14px; color: #aaa; margin-top: -20px;">Secure Access - Please Sign In</p>
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google G" width="20">
+                Sign in with Google
+            </button>
+            <div id="loginStatus" style="color:#ff3366; margin-top:15px; font-size:12px;"></div>
+        </div>
+    </div>
+
+    <!-- ✅ 2. EXPIRED / UPGRADE OVERLAY (Hidden by default) -->
+    <div id="expiredOverlay" style="display:none;">
+        <div class="auth-card">
+            <h1>⚠️ Trial Expired</h1>
+            <p>Your 15-day free access to AI God Mode has ended.</p>
+            <p style="color: #ccc;">Subscribe now to unlock institutional signals, trap detection, and 24/7 GARCH risk metrics.</p>
+            <div style="margin: 30px 0; font-family:'Orbitron'; font-size:24px; color:#fff;">₹2,999 <span style="font-size:12px; color:#aaa;">/ month</span></div>
+            <button class="btn-upgrade" onclick="openPaymentGateway()">
+                🚀 Upgrade to Pro V2.0
+            </button>
+            <div style="margin-top:20px;">
+                <button class="btn-logout" onclick="logout()">or Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ 3. MAIN DASHBOARD (Hidden until Auth + Trial Check) -->
+    <div id="mainDashboard">
+        
+        <!-- Ambient Lofi Audio -->
+        <audio id="bgMusic" loop>
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- DYNAMIC QUOTE TICKER -->
+        <div class="quote-banner">
+            <span id="motivationalQuote">⚡ "Risk comes from not knowing what you're doing. Let AI & GARCH Engine protect your capital." ⚡</span>
+        </div>
+
+        <div class="sniper-header">
+            <h1 class="main-title">🎯 TradeMaster Pro V2.0</h1>
+            <div class="subtitle orbitron">INSTITUTIONAL AI & GARCH ENGINE ENABLED</div>
+            <div class="system-status">
+                
+                <!-- ✅ UPDATED: USER PROFILE INFO & LOGOUT -->
+                <div class="user-profile">
+                    <img src="" id="userPfp" class="user-pfp" alt="P">
+                    <div style="text-align:left;">
+                        <div id="userName" class="user-name">Loading...</div>
+                        <div id="trialDays" style="color:#00ff88; font-size:9px;">Trial</div>
+                    </div>
+                    <button class="btn-logout" onclick="logout()">X</button>
+                </div>
+
+                <!-- Music Control Button -->
+                <button id="musicBtn" class="music-toggle" onclick="toggleMusic()">🔇 ON</button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="status-dot" id="sysStatus"></div>
+                    <span id="sysText" style="color:#aaa;">Live</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="chartModal">
+            <span class="close-chart" onclick="closeChart()">&times;</span>
+            <div class="modal-content" id="chartContainer"></div>
+        </div>
+
+        <!-- SKELETON GRID -->
+        <div class="matrix-grid" id="sectorGrid">
+            <!-- 1. Master Bias -->
+            <div class="matrix-card" style="border-color: rgba(255, 0, 64, 0.4); box-shadow: 0 10px 30px rgba(255, 0, 64, 0.1);">
+                <h3 style="color: #ff3366; font-size: 14px; letter-spacing: 1px;">⚡ MASTER BIAS</h3>
+                <div style="margin: 20px 0;">
+                    <div id="marketBias" style="font-size: 1.8em; font-weight: 900; color: #fff; font-family: 'Orbitron';">LOADING...</div>
+                </div>
+                <div class="metrics-row" style="background: rgba(255,0,64,0.1);">
+                    <div class="metric-item" style="width: 100%;">
+                        <div class="metric-label">MARKET REGIME</div>
+                        <div class="metric-val" id="marketRegime" style="color: #f2cc60; font-size: 18px;">SYNCING...</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Rendered dynamically via JS -->
+        </div>
+
+        <!-- SCAN CONTROLS -->
+        <div class="scan-controls">
+            <div style="position:relative; display: flex; gap: 5px;">
+                <input type="text" id="searchInput" list="stockList" placeholder="Search NSE/MCX" onkeypress="handleEnter(event)">
+                <datalist id="stockList"></datalist>
+                <button class="scan-btn" style="padding: 12px 15px;" onclick="searchStock()">🔍</button>
+            </div>
+            
+            <select id="timeframeSelector">
+                <option value="5m" selected>⚡ SCALP (5m)</option>
+                <option value="15m">🌊 INTRADAY (15m)</option>
+            </select>
+            
+            <button class="scan-btn" onclick="startScan()">🦅 SCAN MARKETS (AI)</button>
+            
+            <label class="checkbox-label">
+                <input type="checkbox" id="autoScan" onchange="toggleAutoScan()"> AUTO-PILOT
+            </label>
+        </div>
+
+        <div id="loader" style="text-align:center; display:none; color:#00d4ff; margin-bottom:20px; font-family:'Orbitron'; font-size: 12px; letter-spacing: 2px;">
+            <span>📡 AI Brain is Analyzing Equities & MCX Commodities...</span>
+        </div>
+
+        <!-- SCAN TABLE -->
+        <div class="table-container">
+            <h4 class="section-title">AI SCANNER RESULTS (NSE + MCX)</h4>
+            <table class="sniper-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>Signal</th>
+                        <th>Score</th>
+                        <th>Volatility</th>
+                        <th>AI Logic</th>
+                        <th style="text-align:center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sniperTableBody">
+                    <tr><td colspan="7" style="text-align:center; color:#555; font-style: italic;">Press SCAN to start AI Engine</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PORTFOLIO TABLE -->
+        <div class="table-container">
+            <h4 class="section-title">ACTIVE POSITIONS (VIRTUAL WALLET)</h4>
+            <table class="sniper-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Type</th>
+                        <th>Entry</th>
+                        <th>Live</th>
+                        <th>P&L (₹)</th>
+                        <th style="text-align:center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="portfolioBody">
+                    <tr><td colspan="6" style="text-align:center; color:#555; font-style: italic;">No Active Trades</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="voice-bar">
+            <div style="text-align: right; line-height:1.2;">
+                <div style="font-size: 9px; color: #88aadd; letter-spacing: 1px;">VOICE ASSISTANT</div>
+                <div style="font-weight: 700; color: #00d4ff; font-size:13px; font-family: 'Orbitron';" id="voiceStatus">IDLE</div>
+            </div>
+            <button class="mic-btn" onclick="activateVoice()" id="micBtn">🎙️</button>
+        </div>
+    </div><!-- End mainDashboard -->
+
+    <!-- ✅ FIREBASE CORE SDK (v10 compatibility) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // ✅ YOUR FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZj2ClpH3cTBiveJHILP6ZjW7hIRZDGHU",
+            authDomain: "trademaster-web.firebaseapp.com",
+            projectId: "trademaster-web",
+            storageBucket: "trademaster-web.firebasestorage.app",
+            messagingSenderId: "60293691838",
+            appId: "1:60293691838:web:690fe64da64d2cc8c1e1ef",
+            measurementId: "G-9DFE0B0Z02"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 🟢 ATTACH AUTH FUNCTIONS TO WINDOW OBJECT FOR HTML ONCLICK
+        window.signInWithGoogle = () => {
+            const statusEl = document.getElementById('loginStatus');
+            statusEl.innerText = "Connecting to Google...";
+            
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // Success will be handled by onAuthStateChanged
+                    console.log("Logged in:", result.user.displayName);
+                }).catch((error) => {
+                    console.error("Auth Error:", error);
+                    statusEl.innerText = "Error: " + error.message;
+                });
+        };
+
+        window.logout = () => {
+            signOut(auth).then(() => {
+                // Sign-out successful. Location reload handled by auth observer
+                location.reload();
+            }).catch((error) => {
+                alert("Error logging out: " + error.message);
+            });
+        };
+
+        // 🟠 AUTH STATE OBSERVER & TRIAL LOGIC
+        onAuthStateChanged(auth, (user) => {
+            const loginOverlay = document.getElementById('loginOverlay');
+            const expiredOverlay = document.getElementById('expiredOverlay');
+            const mainDashboard = document.getElementById('mainDashboard');
+
+            if (user) {
+                // User is signed in. Now check trial duration.
+                const creationTime = new Date(user.metadata.creationTime);
+                const currentTime = new Date();
+                
+                // Calculate difference in days
+                const diffTime = Math.abs(currentTime - creationTime);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                
+                console.log(`User registered ${diffDays} days ago.`);
+
+                if (diffDays > 15) {
+                    // 🔴 TRIAL EXPIRED
+                    loginOverlay.style.display = 'none';
+                    expiredOverlay.style.display = 'flex';
+                    mainDashboard.style.display = 'none';
+                    document.body.style.overflow = 'hidden'; // Lock scroll
+                    stopDashboardUpdates(); // Safety
+                } else {
+                    // 🟢 WITHIN TRIAL (SHOW DASHBOARD)
+                    loginOverlay.style.opacity = '0';
+                    setTimeout(() => loginOverlay.style.display = 'none', 500);
+                    
+                    expiredOverlay.style.display = 'none';
+                    mainDashboard.style.display = 'block';
+                    setTimeout(() => mainDashboard.style.opacity = '1', 100);
+                    
+                    document.body.style.overflow = 'auto'; // Unlock scroll
+
+                    // Update Profile UI
+                    document.getElementById('userName').innerText = user.displayName;
+                    document.getElementById('userPfp').src = user.photoURL || 'https://via.placeholder.com/30';
+                    const daysLeft = 15 - diffDays;
+                    document.getElementById('trialDays').innerText = `${daysLeft} days trial left`;
+                    
+                    // Start Dashboard Functional Logic
+                    dashboardActive = true; 
+                    initDashboard(); 
+                }
+            } else {
+                // 🟡 User is signed out. Show login.
+                loginOverlay.style.display = 'flex';
+                loginOverlay.style.opacity = '1';
+                expiredOverlay.style.display = 'none';
+                mainDashboard.style.display = 'none';
+                document.body.style.overflow = 'hidden'; // Lock scroll
+                stopDashboardUpdates(); // Safety
+            }
+        });
+
+    </script>
+
+    <!-- ✅ MAIN DASHBOARD FUNCTIONAL LOGIC (Non-Module Script) -->
+    <script>
+        // Use Ngrok/AWS public URL if available. Keep localhost only if backend runs locally.
+        const API_URL = "http://127.0.0.1:8080"; 
+        
+        let dashboardActive = false; // Auth check variable
+        let cash = 100000;
+        let portfolio = []; 
+        let livePrices = {};
+        let prevPrices = {}; 
+        let prevScannerPrices = {}; 
+        let autoScanInterval;
+        let musicPlaying = false;
+        let dataInterval, quoteInterval;
+
+        // Functional Initialization function called after valid login
+        function initDashboard() {
+            if(!dashboardActive) return;
+
+            loadSymbols();
+            checkSystem();
+            updateMarketData();
+
+            // Start intervals only if logged in
+            if(dataInterval) clearInterval(dataInterval);
+            dataInterval = setInterval(updateMarketData, 4000); 
+
+            if(quoteInterval) clearInterval(quoteInterval);
+            quoteInterval = setInterval(rotateQuotes, 5000);
+        }
+
+        function stopDashboardUpdates() {
+            dashboardActive = false;
+            if(dataInterval) clearInterval(dataInterval);
+            if(quoteInterval) clearInterval(quoteInterval);
+            if(autoScanInterval) clearInterval(autoScanInterval);
+            let audio = document.getElementById('bgMusic');
+            if(audio) audio.pause();
+        }
+
+        // Placeholder for future Payment Gateway integration
+        function openPaymentGateway() {
+            alert("Razorpay/Stripe integration for ₹2,999/month subscription coming in the next step.");
+            // Later, this will redirect to a Razorpay link or open Razorpay checkout.
+        }
+
+        // --- Rest of your functional dashboard logic (ToggleMusic, Quotes, Portfolio, Scan, charts, voice, etc.) below ---
+        // Exactly as provided in your file, just ensured they check 'dashboardActive' if needed.
+
+        // ✅ Audio Toggle Logic
+        function toggleMusic() {
+            if(!dashboardActive) return;
+            let audio = document.getElementById('bgMusic');
+            let btn = document.getElementById('musicBtn');
+            if(musicPlaying) {
+                audio.pause();
+                btn.innerText = "🔇 OFF";
+                btn.style.color = "#88aadd";
+                btn.style.borderColor = "rgba(255,255,255,0.1)";
+            } else {
+                audio.volume = 0.3; // Keep it soft
+                audio.play().catch(e => console.log("Audio play blocked by browser. User interaction required."));
+                btn.innerText = "🎵 ON";
+                btn.style.color = "#00ff88";
+                btn.style.borderColor = "#00ff88";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // Dynamic Motivational Quotes Rotation
+        const quotes = [
+            '⚡ "Discipline is the bridge between AI precision and trading wealth." ⚡',
+            '🎯 "Cut your losses short, let the AI God Mode run your winning trades." 🎯',
+            '🛡️ "Risk comes from not knowing what you do. Trust GARCH Engine." 🛡️',
+            '🚀 "Patience is a trader\'s greatest weapon. Wait for the 85+ setup." 🚀'
+        ];
+        let qIdx = 0;
+        function rotateQuotes() {
+            if(!dashboardActive) return;
+            qIdx = (qIdx + 1) % quotes.length;
+            document.getElementById('motivationalQuote').innerText = quotes[qIdx];
+        }
+
+        // Portfolio Persistence
+        if(localStorage.getItem('tm_cash')) { 
+            cash = parseFloat(localStorage.getItem('tm_cash')); 
+            try { portfolio = JSON.parse(localStorage.getItem('tm_portfolio')) || []; } catch(e) { portfolio = []; }
+        }
+
+        // System Connectivity Check
+        async function checkSystem() {
+            if(!dashboardActive) return;
+            try {
+                // Using modern fetch options for compatibility through Ngrok if needed
+                let res = await fetch(`${API_URL}/api`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+                if(res.ok) {
+                    document.getElementById('sysStatus').className = "status-dot status-online";
+                    document.getElementById('sysText').innerText = "Live";
+                    document.getElementById('sysText').style.color = "#00ff88";
+                }
+            } catch(e) {
+                document.getElementById('sysStatus').className = "status-dot";
+                document.getElementById('sysText').innerText = "Offline";
+                document.getElementById('sysText').style.color = "#ff3366";
+            }
+        }
+
+        // Load Datalist symbols
+        async function loadSymbols() {
+            try {
+                let res = await fetch(`${API_URL}/all_symbols`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+                let stocks = await res.json();
+                let dl = document.getElementById('stockList');
+                if(!dl) return;
+                dl.innerHTML = "";
+                stocks.forEach(s => { let o = document.createElement('option'); o.value = s; dl.appendChild(o); });
+            } catch(e) {}
+        }
+
+        // Core Market Data updates (Nifty, Banks, Commodities)
+        async function updateMarketData() {
+            if(!dashboardActive) return;
+            try {
+                let resStatus = await fetch(`${API_URL}/market_status`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+                if(!resStatus.ok) throw new Error("Backend offline");
+                let statusData = await resStatus.json();
+                
+                statusData.forEach(idx => {
+                    let n = idx.name.toUpperCase().replace(/\s+/g, ''); 
+                    if (n === "NIFTY50") n = "NIFTY";
+                    if (n === "BANK") n = "BANKNIFTY";
+                    
+                    prevPrices[n] = livePrices[n] || idx.price;
+                    livePrices[n] = idx.price;
+                });
+
+                let resOptions = await fetch(`${API_URL}/option_chain`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+                let data = await resOptions.json();
+                
+                let grid = document.getElementById('sectorGrid');
+                if(!grid) return;
+                
+                // Add Master Bias Card first
+                let htmlContent = `
+                <div class="matrix-card" style="border-color: rgba(255, 0, 64, 0.4); box-shadow: 0 10px 30px rgba(255, 0, 64, 0.1);">
+                    <h3 style="color: #ff3366; font-size: 14px; letter-spacing: 1px;">⚡ MASTER BIAS</h3>
+                    <div style="margin: 20px 0;"><div id="marketBias" style="font-size: 1.8em; font-weight: 900; color: #fff; font-family: 'Orbitron';">ANALYZING...</div></div>
+                    <div class="metrics-row" style="background: rgba(255,0,64,0.1);">
+                        <div class="metric-item" style="width: 100%;"><div class="metric-label">MARKET REGIME</div><div class="metric-val" id="marketRegime" style="color: #f2cc60; font-size: 18px;">--</div></div>
+                    </div>
+                </div>`;
+
+                let niftyTrend = "SIDEWAYS", bankTrend = "SIDEWAYS";
+
+                // Map through indices and commodities
+                for (const [rawName, secData] of Object.entries(data)) {
+                    if(!secData || !secData.trend) continue;
+                    
+                    let secName = rawName.toUpperCase().replace(/\s+/g, '');
+                    if (secName === "NIFTY50") secName = "NIFTY";
+                    if (secName === "BANK") secName = "BANKNIFTY";
+
+                    if (secName === "NIFTY") niftyTrend = secData.trend;
+                    if (secName === "BANKNIFTY") bankTrend = secData.trend;
+
+                    let color = secData.color || "#fff";
+                    
+                    // Parse PCR and CAP at 100%
+                    let rawPcr = secData.pcr.toString().replace("%","");
+                    let pcrNum = isNaN(parseInt(rawPcr)) ? 0 : Math.min(parseInt(rawPcr), 100);
+                    let pcrText = (secData.pcr === "Wait" || rawPcr === "Wait") ? "--" : pcrNum + "%";
+                    
+                    // Price Flash Logic
+                    let priceDisplay = livePrices[secName] || "--";
+                    let flashClass = "";
+                    if (livePrices[secName] && prevPrices[secName]) {
+                        if (livePrices[secName] > prevPrices[secName]) flashClass = "flash-up";
+                        else if (livePrices[secName] < prevPrices[secName]) flashClass = "flash-down";
+                    }
+
+                    let isCommodity = secName.includes("CRUDE") || secName.includes("GOLD") || secName.includes("SILVER") || secName.includes("NATURAL");
+                    let titleIcon = isCommodity ? "🛢️ MCX" : "📈";
+                    if(secName.includes("GOLD")) titleIcon = "🥇 MCX";
+                    if(secName.includes("SILVER")) titleIcon = "🥈 MCX";
+
+                    htmlContent += `
+                    <div class="matrix-card" style="border-top: 3px solid ${color};">
+                        <h3 style="color: ${color}; font-size: 15px; letter-spacing: 1px;">${titleIcon}${secName}</h3>
+                        <div class="price-text ${flashClass}">${priceDisplay}</div>
+                        <div class="signal-text" style="color:${color};">${secData.signal || 'WAIT'}</div>
+                        <div class="metrics-row">
+                            <div class="metric-item"><div class="metric-label">TREND</div><div class="metric-val" style="color:${color};">${secData.trend}</div></div>
+                            <div class="metric-item"><div class="metric-label">AI SCORE</div><div class="metric-val">${pcrText}</div></div>
+                        </div>
+                        
+                        <!-- Square Dotted Progress Bar -->
+                        <div class="meter-container">
+                            <div class="meter-fill" style="background-image: repeating-linear-gradient(to right, ${color} 0, ${color} 4px, transparent 4px, transparent 8px); width:${pcrNum}%;"></div>
+                        </div>
+                        
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            ${isCommodity ? 
+                                `<button class="btn-action btn-buy" onclick="buyStock('${secName}', ${priceDisplay})">BUY (LONG)</button>
+                                 <button class="btn-action btn-sell" onclick="sellPosCommodity('${secName}', ${priceDisplay})">SELL (SHORT)</button>` 
+                                : 
+                                `<button class="btn-action btn-buy" onclick="buyIndex('${secName}', 'CE')">TRADE CE</button>
+                                 <button class="btn-action btn-sell" onclick="buyIndex('${secName}', 'PE')">TRADE PE</button>`
+                            }
+                        </div>
+                    </div>`;
+                }
+
+                // Append virtual Wallet
+                htmlContent += `
+                <div class="matrix-card" style="border-color: rgba(0, 212, 255, 0.3);">
+                    <h3 style="color: #00d4ff; font-size: 14px; letter-spacing: 1px;">💼 VIRTUAL WALLET</h3>
+                    <div style="margin-top: 20px; font-size: 1.2em; font-weight: 600;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom: 10px;"><span style="color:#88aadd; font-size:14px;">Virtual Cash:</span> <span id="cashBalance" style="color:#00d4ff; font-family:'Orbitron';">₹1,00,000</span></div>
+                        <div style="display:flex; justify-content:space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);"><span style="color:#88aadd; font-size:14px;">Total P&L:</span> <span id="totalPnL" style="font-family:'Orbitron';">₹0</span></div>
+                    </div>
+                    <div style="margin-top:25px;">
+                        <button class="btn-action" style="background: rgba(255,255,255,0.05); border-color: #ff3366; color:#ff3366; font-size:10px;" onclick="resetPortfolio()">RESET WALLET</button>
+                    </div>
+                </div>`;
+
+                grid.innerHTML = htmlContent;
+
+                // Update Master Bias colors/text based on trends
+                let biasEl = document.getElementById('marketBias');
+                if(biasEl) {
+                    if (niftyTrend.includes("BULL") && bankTrend.includes("BULL")) {
+                        biasEl.innerText = "🚀 FULL BULL"; biasEl.style.color = "#00ff88";
+                        document.getElementById('marketRegime').innerText = "STRONG UPTREND";
+                    } else if (niftyTrend.includes("BEAR") && bankTrend.includes("BEAR")) {
+                        biasEl.innerText = "🩸 FULL BEAR"; biasEl.style.color = "#ff3366";
+                        document.getElementById('marketRegime').innerText = "STRONG DOWNTREND";
+                    } else {
+                        biasEl.innerText = "⚖️ MIXED / CHOPPY"; biasEl.style.color = "#f2cc60";
+                        document.getElementById('marketRegime').innerText = "VOLATILE / SIDEWAYS";
+                    }
+                }
+                
+                renderPortfolio();
+            } catch(e) {}
+        }
+
+        // Trigger AI Scanner
+        async function startScan() {
+            if(!dashboardActive) return;
+            let iv = document.getElementById('timeframeSelector').value;
+            document.getElementById('loader').style.display = "block";
+            let tbody = document.getElementById('sniperTableBody');
+
+            try {
+                let res = await fetch(`${API_URL}/scan/${iv}`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+                let data = await res.json();
+                
+                // Sort by absolute score
+                data.sort((a,b) => Math.abs(b.Score) - Math.abs(a.Score));
+                tbody.innerHTML = "";
+                
+                if(data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#88aadd; padding: 30px;">No High-Confidence Signals currently. Market is choppy.भाई वेजय, बहुत बढ़िया! आपने keys Notepad में सेव कर ली हैं और पहला स्टेप (डिज़ाइन) पेस्ट कर दिया है।
+
+अब आता है सबसे **ज़बरदस्ती और पक्का** काम, जिससे लॉगिन स्क्रीन सच में काम करने लगेगी। आपको अपनी HTML फ़ाइल में आपकी कस्टमाइज़ की हुई Keys के साथ Firebase का असली लॉजिक (Script) डालना है।
+
+मैंने इसमें वो लॉजिक भी जोड़ दिया है जो यूज़र का डेटा (ईमेल, नाम और लॉगिन का समय) लोकल में सेव कर लेगा। यही डेटा आगे चलकर हमें यह चेक करने में मदद करेगा कि क्या यूज़र का **15-दिन का ट्रायल** खत्म हो गया है या नहीं।
+
+### final Step: Firebase Logic पेस्ट करें (अपनी Keys के साथ)
+
+अपनी `index.html` फ़ाइल में सबसे नीचे जाएँ, जहाँ **`</body>`** टैग बंद हो रहा है। ठीक उसके ऊपर यह Firebase वाला स्क्रिप्ट कोड पेस्ट करें।
+
+**⚠️ बहुत ज़रूरी ध्यान दें:** इस कोड में जहाँ मैंने `// ✅ APNI KEYS YAHAN DALEIN` लिखा है, वहाँ वो Keys (जो आपने Notepad में सेव की थीं) पेस्ट कर दें।
+
+```html
+<!-- FIREBASE AUTHENTICATION LOGIC (Login + Trial Data Collection) -->
+<script type="module">
+  // Firebase Modules Import
+  import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js)";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "[https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js)";
+
+  // 1. ✅ APNI KEYS YAHAN DALEIN 👇 (Notepad se copy karke replace karein)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCZj2ClpH3cTBiveJHILP6ZjW7hIRZDGHU",
+    authDomain: "trademaster-web.firebaseapp.com",
+    projectId: "trademaster-web",
+    storageBucket: "trademaster-web.firebasestorage.app",
+    messagingSenderId: "60293691838",
+    appId: "1:60293691838:web:690fe64da64d2cc8c1e1ef",
+    measurementId: "G-9DFE0B0Z02"
+  };
+  // ✅ KEY PASTE YAHAN TAK 👆
+
+  // 2. Firebase चालू करें
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // 3. Google Login बटन दबाने पर क्या होगा
+  window.loginWithGoogle = () => {
+      document.getElementById('loginError').style.display = 'none';
+      document.getElementById('loginError').innerText = "Connecting..."; // यूजर को बताएँ
+
+      signInWithPopup(auth, provider)
+      .then((result) => {
+          const user = result.user;
+          console.log("Login Success:", user.displayName);
+
+          // SUCCESS: लॉगिन स्क्रीन हटा दो और हेडर में नाम दिखाओ
+          document.getElementById('loginOverlay').style.display = 'none';
+          document.getElementById('sysText').innerText = "WELCOME, " + user.displayName.toUpperCase();
+          document.getElementById('sysText').style.color = "#00ff88"; // Neon Green
+          
+          // --- TRIAL LOGIC (डेटा सेव करना) ---
+          // चेक करें कि क्या यूजर नया है या लोकल डेटा डिलीट हो गया है
+          if(!localStorage.getItem('tm_join_date')) {
+              // आज की तारीख सेव करें (यही वो तारीख है जिससे 15 दिन गिने जाएँगे)
+              localStorage.setItem('tm_join_date', new Date().toISOString());
+              // ईमेल और नाम भी सेव कर लें (बाद में काम आएगा)
+              localStorage.setItem('tm_user_email', user.email);
+              localStorage.setItem('tm_user_name', user.displayName);
+          }
+      }).catch((error) => {
+          console.error("Login Error:", error);
+          document.getElementById('loginError').innerText = "Login Failed. Try Again.";
+          document.getElementById('loginError').style.display = 'block';
+      });
+  };
+
+  // 4. Logout फंक्शन (अगर हेडर में बाद में बटन जोड़ें)
+  window.logoutUser = () => {
+      signOut(auth).then(() => {
+          location.reload(); // पेज रीफ्रेश करके लॉगिन स्क्रीन वापस लाओ
+      }).catch((error) => {
+          console.error("Logout Error:", error);
+      });
+  };
+
+  // 5. पेज लोड होने पर चेक करें: क्या यूजर पहले से लॉगिन है?
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          // अगर हाँ, तो लॉगिन स्क्रीन हटाओ और डैशबोर्ड दिखाओ
+          document.getElementById('loginOverlay').style.display = 'none';
+          document.getElementById('sysText').innerText = "WELCOME, " + user.displayName.toUpperCase();
+          document.getElementById('sysText').style.color = "#00ff88";
+          
+          // अगर यूज़र लॉगिन है लेकिन लोकल में tm_join_date नहीं है (जैसे दूसरे ब्राउज़र में), 
+          // तो सेफ़्टी के लिए आज की तारीख सेव कर लो (हालांकि असली चेक AWS पे होगा)
+          if(!localStorage.getItem('tm_join_date')){
+              localStorage.setItem('tm_join_date', new Date().toISOString());
+              localStorage.setItem('tm_user_email', user.email);
+          }
+
+      } else {
+          // अगर लॉगिन नहीं है, तो लॉगिन स्क्रीन दिखाओ
+          document.getElementById('loginOverlay').style.display = 'flex';
+          document.getElementById('sysText').innerText = "SYSTEM CONNECTED"; // डिफॉल्ट text
+      }
+  });
+</script>
