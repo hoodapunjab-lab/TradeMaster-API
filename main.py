@@ -31,12 +31,19 @@ is_updating_status = False
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=15)
 
+# ✅ UPDATED CORS POLICY (For HTTPS Live Website)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://trademaster-web.web.app", 
+        "https://trademaster-web.firebaseapp.com",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "*" # Fallback
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*", "Authorization", "Content-Type", "ngrok-skip-browser-warning", "Access-Control-Allow-Origin"],
 )
 
 if not os.path.exists("static"): os.makedirs("static")
@@ -189,7 +196,7 @@ async def scan(interval: str):
     try:
         import scanner
         results = await loop.run_in_executor(executor, scanner.scan_market, interval)
-        
+
         # ✅ API LEVEL SCORE CAPPING (Scanner Table)
         if isinstance(results, list):
             for res in results:
@@ -197,7 +204,7 @@ async def scan(interval: str):
                     res['Score'] = int(min(abs(res['Score']), 100))
                 if 'Accuracy' in res:
                     res['Accuracy'] = float(min(abs(res['Accuracy']), 100.0))
-        
+
         return results
     except Exception as e:
         return {"error": str(e)}
@@ -210,11 +217,11 @@ async def ask_ai(symbol: str):
     clean_sym = symbol.upper().replace(".NS", "").replace("-EQ", "")
     loop = asyncio.get_event_loop()
     res = await loop.run_in_executor(executor, brain.predict_signal, clean_sym)
-    
+
     # ✅ API LEVEL SCORE CAPPING (Direct AI Queries)
     if isinstance(res, dict) and 'prob' in res:
         res['prob'] = float(min(abs(res['prob']), 100.0))
-        
+
     return res
 
 @app.get("/all_symbols")
